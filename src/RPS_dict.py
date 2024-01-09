@@ -1,4 +1,5 @@
 import random
+import json
 from enum import IntEnum
 
 
@@ -59,10 +60,50 @@ def assess_game(user_action, computer_action):
     return game_result
 
 
-def get_computer_action():
+def obtener_numero_aleatorio(escenario):
+    #Número aleatorrio entre 1 y 100
+    num_aleatorio = random.randint(1, 100)
+    limite_inferior = 0
+
+    
+    for numero, probabilidad in escenario.items():
+        limite_superior = limite_inferior + probabilidad
+        # Comprueba si el número aleatorio generado está dentro del rango actual
+        if limite_inferior < num_aleatorio <= limite_superior:
+            return numero
+        # Actualiza el límite inferior para la próxima iteración
+        limite_inferior = limite_superior
+
+# Escenarios con sus porcentajes, tomando como referencia la imagen adjuntada en el README
+partidas_probabilidades = [
+    {0: 26, 1: 51, 2: 23},  # Partida 1
+    {0: 36, 1: 36, 2: 28},  # Partida 2
+    {0: 32, 1: 37, 2: 30},  # Partida 3
+]
+    
+def get_computer_action1():
     computer_selection = random.randint(0, len(GameAction) - 1)
     computer_action = GameAction(computer_selection)
     print(f"Computer picked {computer_action.name}.")
+
+    return computer_action
+
+def get_computer_action(partida):
+    
+    if partida == 0 or partida == 1 or partida == 2:
+
+        computer_selection = obtener_numero_aleatorio(partidas_probabilidades[partida])
+        computer_action = GameAction(computer_selection)
+        print(f"Computer picked {computer_action.name}.")
+        
+    else:
+        
+        #Modificar condición a partir de la 3 partida
+        computer_selection = random.randint(0, len(GameAction) - 1)
+        computer_action = GameAction(computer_selection)
+        print(f"Computer picked {computer_action.name}.")
+
+        return computer_action
 
     return computer_action
 
@@ -78,22 +119,44 @@ def get_user_action():
 
 
 def play_another_round():
-    another_round = input("\nAnother round? (y/n): ")
+    another_round = input("\nAnother round? (y/n) : ")
+    while (another_round != "y") and (another_round != "n"):
+        another_round = input("\nInvalid selection. Please insert yes (y) or no (n) or press CTRL+C to exit : ")
     return another_round.lower() == 'y'
 
 
 def main():
+    
+    partida = 0
 
     while True:
         try:
-            user_action = get_user_action()
+            player1 = get_user_action()
         except ValueError:
             range_str = f"[0, {len(GameAction) - 1}]"
             print(f"Invalid selection. Pick a choice in range {range_str}!")
             continue
 
-        computer_action = get_computer_action()
-        assess_game(user_action, computer_action)
+        result_json = 'result.json'
+        
+        try:
+            with open(result_json, 'r') as f:
+                game_record = json.load(f)
+        except FileNotFoundError:
+            game_record = {"record": []}
+
+        player2 = get_computer_action(partida)
+        result = assess_game(player1, player2)
+
+        match_info = {"player1": player1, "player2": player2, "result": result}
+        
+        game_record["record"].append(match_info)
+
+        # Save the results to a file
+        with open(result_json, 'w') as f:
+            json.dump(game_record, f, indent=4)
+            
+        partida +=1
 
         if not play_another_round():
             break
