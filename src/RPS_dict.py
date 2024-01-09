@@ -95,15 +95,24 @@ def main():
             print(f"Invalid selection. Pick a choice in range {range_str}!")
             continue
 
+        result_json = 'result.json'
+        
+        try:
+            with open(result_json, 'r') as f:
+                game_record = json.load(f)
+        except FileNotFoundError:
+            game_record = {"record": []}
+
         player2 = get_computer_action()
         result = assess_game(player1, player2)
 
         match_info = {"player1": player1, "player2": player2, "result": result}
+        
+        game_record["record"].append(match_info)
 
         # Save the results to a file
-        with open('results.json', 'a') as f:
-            json.dump(match_info, f)
-            f.write('\n')
+        with open(result_json, 'w') as f:
+            json.dump(game_record, f, indent=4)
 
         if not play_another_round():
             break
