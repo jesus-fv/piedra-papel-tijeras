@@ -22,6 +22,14 @@ Victories = {
     GameAction.Scissors: GameAction.Rock
 }
 
+
+# Porcentaje de probabilidad de elección para las tres primeras partidas
+partidas_probabilidades = [
+    {0: 26, 1: 51, 2: 23},  # Partida 1
+    {0: 36, 1: 36, 2: 28},  # Partida 2
+    {0: 32, 1: 37, 2: 30},  # Partida 3
+]
+
 def assess_game(user_action, computer_action):
 
     game_result = None
@@ -60,13 +68,13 @@ def assess_game(user_action, computer_action):
     return game_result
 
 
-def obtener_numero_aleatorio(escenario):
+def obtener_numero_aleatorio(partidas_probabilidades):
     #Número aleatorrio entre 1 y 100
     num_aleatorio = random.randint(1, 100)
     limite_inferior = 0
 
     
-    for numero, probabilidad in escenario.items():
+    for numero, probabilidad in partidas_probabilidades.items():
         limite_superior = limite_inferior + probabilidad
         # Comprueba si el número aleatorio generado está dentro del rango actual
         if limite_inferior < num_aleatorio <= limite_superior:
@@ -74,19 +82,6 @@ def obtener_numero_aleatorio(escenario):
         # Actualiza el límite inferior para la próxima iteración
         limite_inferior = limite_superior
 
-# Escenarios con sus porcentajes, tomando como referencia la imagen adjuntada en el README
-partidas_probabilidades = [
-    {0: 26, 1: 51, 2: 23},  # Partida 1
-    {0: 36, 1: 36, 2: 28},  # Partida 2
-    {0: 32, 1: 37, 2: 30},  # Partida 3
-]
-    
-def get_computer_action1():
-    computer_selection = random.randint(0, len(GameAction) - 1)
-    computer_action = GameAction(computer_selection)
-    print(f"Computer picked {computer_action.name}.")
-
-    return computer_action
 
 def get_computer_action(partida):
     
@@ -94,16 +89,36 @@ def get_computer_action(partida):
 
         computer_selection = obtener_numero_aleatorio(partidas_probabilidades[partida])
         computer_action = GameAction(computer_selection)
-        print(f"Computer picked {computer_action.name}.")
+        print(f"Computer picked 1 {computer_action.name}.")
         
     else:
-        
-        #Modificar condición a partir de la 3 partida
-        computer_selection = random.randint(0, len(GameAction) - 1)
-        computer_action = GameAction(computer_selection)
-        print(f"Computer picked {computer_action.name}.")
 
-        return computer_action
+        # Path to your JSON file 
+        json_file_path = 'result.json'
+
+        # Read the JSON data 
+        with open(json_file_path, 'r') as file: 
+            data = json.load(file)
+        
+        game_record = data['record']
+        
+        # Resultado última partida
+        for game in game_record:
+            player1 = game['player1']
+            player2 = game['player2']
+            result = game['result']
+
+        if result == 0:
+            computer_action = GameAction(random.randint(0, 1))
+            print(f"Computer picked {computer_action.name}.")
+        else:
+            if player1 == 0:
+                computer_action = GameAction(1)
+            elif player1 == 1:
+                computer_action = GameAction(2)
+            elif player1 == 2:
+                computer_action = GameAction(0)
+            print(f"Computer picked {computer_action.name}.")
 
     return computer_action
 

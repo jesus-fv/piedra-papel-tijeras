@@ -46,6 +46,8 @@ Para la implementación del agente, se utiliza una estadística para las tres pr
 
 ![img](doc/rps1.png)
 
+A partir de la 3ª partida seguiría las siguientes reglas obviando el sexo del usuario:
+
 ![img](doc/rps2.png)
 
 Este agente está implementado en Python 3.10.12 y utiliza la librería Pandas. El código fue aportado por el usuario [@dfleta](https://github.com/dfleta) y modificado para acatar las necesidades de este proyecto por [@cuernomax2](https://github.com/cuernomax2) y por mí. El código se encuentra en [mi repositorio de Git](https://github.com/jesus-fv/piedra-papel-tijeras)
