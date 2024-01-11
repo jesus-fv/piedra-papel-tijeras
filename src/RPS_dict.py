@@ -22,14 +22,6 @@ Victories = {
     GameAction.Scissors: GameAction.Rock
 }
 
-
-# Porcentaje de probabilidad de elección para las tres primeras partidas
-game_probability = [
-    {0: 26, 1: 51, 2: 23},  # Partida 1
-    {0: 36, 1: 36, 2: 28},  # Partida 2
-    {0: 32, 1: 37, 2: 30},  # Partida 3
-]
-
 def assess_game(user_action, computer_action):
 
     game_result = None
@@ -68,53 +60,67 @@ def assess_game(user_action, computer_action):
     return game_result
 
 
-def get_random_number(game_probability):
-    #Random number between 1 and 100
-    random_number = random.randint(1, 100)
-    lower_limit = 0
+def get_player_history():
+    
+    player_history = []
+    
+    # Path to your JSON file
+    json_file_path = 'history.json'
 
-    for num, probability in game_probability.items():
-        upper_limit = lower_limit + probability
-        # Check if the generated random number is within the current range
-        if lower_limit < random_number <= upper_limit:
-            return num
-        # Update the lower bound for the next iteration
-        lower_limit = upper_limit
+    # Read the JSON data 
+    try:
+        with open(json_file_path, 'r') as file: 
+            data = json.load(file)
+            
+            game_history = data['history']
+    
+        for game in game_history:
+            player_history.append(game['player'])
+            
+    except FileNotFoundError:
+        return []
+    
+        
+    return player_history
+    
+    
+def calculate_probabilities():
+    
+    probabilities = {0: 0, 1: 0, 2: 0}
+    
+    player_history = get_player_history()
+        
+    total_elections = len(player_history)
+        
+    for player_action in probabilities:
+        frequency = player_history.count(player_action)
+        probabilities[player_action] = frequency / total_elections
+    
+    return probabilities
 
 
 def get_computer_action(game):
     
-    if game == 0 or game == 1 or game == 2:
+    if len(get_player_history()) <= 2:
 
-        computer_selection = get_random_number(game_probability[game])
+        computer_selection = random.randint(0, len(GameAction) - 1)
         computer_action = GameAction(computer_selection)
         print(f"Computer picked 1 {computer_action.name}.")
         
     else:
 
-        # Path to your JSON file
-        json_file_path = 'history.json'
-
-        # Read the JSON data 
-        with open(json_file_path, 'r') as file: 
-            data = json.load(file)
+        probabilities = calculate_probabilities()
+        player_action_frequency = max(probabilities, key=probabilities.get)
         
-        game_history = data['history']
-        for game in game_history:
-            player = game['player']
-            #computer = game['computer']
-            result = game['result']
-        if result == 0:
-            computer_action = GameAction(random.randint(0, 1))
-            print(f"Computer picked {computer_action.name}.")
-        else:
-            if player == 0:
-                computer_action = GameAction(1)
-            elif player == 1:
-                computer_action = GameAction(2)
-            elif player == 2:
-                computer_action = GameAction(0)
-            print(f"Computer picked {computer_action.name}.")
+        opciones = {0: 1, 1: 2, 2: 0}
+        computer_action = GameAction(opciones[player_action_frequency])
+        
+        # Introducimos cierta aleatoriedad para evitar patrones demasiado predecibles
+        if random.random() < 0.1:
+            # 10% de probabilidad de elegir una acción aleatoria
+            computer_action = random.randint(0, len(GameAction) - 1)
+            
+        print(f"Computer picked 1 {computer_action.name}.")
 
     return computer_action
 
@@ -148,7 +154,7 @@ def update_history(game, player, computer, result):
     
     game_history["history"].append(match_info)
 
-    # Save the results to a file
+    # Guardar los resultados en el archivo
     with open(result_json, 'w') as f:
         json.dump(game_history, f, indent=4)
 
