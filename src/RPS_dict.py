@@ -24,7 +24,7 @@ Victories = {
 
 
 # Porcentaje de probabilidad de elección para las tres primeras partidas
-partidas_probabilidades = [
+game_probability = [
     {0: 26, 1: 51, 2: 23},  # Partida 1
     {0: 36, 1: 36, 2: 28},  # Partida 2
     {0: 32, 1: 37, 2: 30},  # Partida 3
@@ -68,55 +68,51 @@ def assess_game(user_action, computer_action):
     return game_result
 
 
-def obtener_numero_aleatorio(partidas_probabilidades):
-    #Número aleatorrio entre 1 y 100
-    num_aleatorio = random.randint(1, 100)
-    limite_inferior = 0
+def get_random_number(game_probability):
+    #Random number between 1 and 100
+    random_number = random.randint(1, 100)
+    lower_limit = 0
 
+    for num, probability in game_probability.items():
+        upper_limit = lower_limit + probability
+        # Check if the generated random number is within the current range
+        if lower_limit < random_number <= upper_limit:
+            return num
+        # Update the lower bound for the next iteration
+        lower_limit = upper_limit
+
+
+def get_computer_action(game):
     
-    for numero, probabilidad in partidas_probabilidades.items():
-        limite_superior = limite_inferior + probabilidad
-        # Comprueba si el número aleatorio generado está dentro del rango actual
-        if limite_inferior < num_aleatorio <= limite_superior:
-            return numero
-        # Actualiza el límite inferior para la próxima iteración
-        limite_inferior = limite_superior
+    if game == 0 or game == 1 or game == 2:
 
-
-def get_computer_action(partida):
-    
-    if partida == 0 or partida == 1 or partida == 2:
-
-        computer_selection = obtener_numero_aleatorio(partidas_probabilidades[partida])
+        computer_selection = get_random_number(game_probability[game])
         computer_action = GameAction(computer_selection)
         print(f"Computer picked 1 {computer_action.name}.")
         
     else:
 
-        # Path to your JSON file 
-        json_file_path = 'result.json'
+        # Path to your JSON file
+        json_file_path = 'history.json'
 
         # Read the JSON data 
         with open(json_file_path, 'r') as file: 
             data = json.load(file)
         
-        game_record = data['record']
-        
-        # Resultado última partida
-        for game in game_record:
-            player1 = game['player1']
-            player2 = game['player2']
+        game_history = data['history']
+        for game in game_history:
+            player = game['player']
+            #computer = game['computer']
             result = game['result']
-
         if result == 0:
             computer_action = GameAction(random.randint(0, 1))
             print(f"Computer picked {computer_action.name}.")
         else:
-            if player1 == 0:
+            if player == 0:
                 computer_action = GameAction(1)
-            elif player1 == 1:
+            elif player == 1:
                 computer_action = GameAction(2)
-            elif player1 == 2:
+            elif player == 2:
                 computer_action = GameAction(0)
             print(f"Computer picked {computer_action.name}.")
 
@@ -139,39 +135,42 @@ def play_another_round():
         another_round = input("\nInvalid selection. Please insert yes (y) or no (n) or press CTRL+C to exit : ")
     return another_round.lower() == 'y'
 
+def update_history(game, player, computer, result):
+    result_json = 'history.json'
+    
+    try:
+        with open(result_json, 'r') as f:
+            game_history = json.load(f)
+    except FileNotFoundError:
+        game_history = {"history": []}
+        
+    match_info = {"game_number":game, "player": player, "computer": computer, "result": result}
+    
+    game_history["history"].append(match_info)
+
+    # Save the results to a file
+    with open(result_json, 'w') as f:
+        json.dump(game_history, f, indent=4)
+
 
 def main():
     
-    partida = 0
+    game = 0
 
     while True:
         try:
-            player1 = get_user_action()
+            player = get_user_action()
         except ValueError:
             range_str = f"[0, {len(GameAction) - 1}]"
             print(f"Invalid selection. Pick a choice in range {range_str}!")
             continue
 
-        result_json = 'result.json'
-        
-        try:
-            with open(result_json, 'r') as f:
-                game_record = json.load(f)
-        except FileNotFoundError:
-            game_record = {"record": []}
+        computer = get_computer_action(game)
+        result = assess_game(player, computer)
 
-        player2 = get_computer_action(partida)
-        result = assess_game(player1, player2)
-
-        match_info = {"player1": player1, "player2": player2, "result": result}
-        
-        game_record["record"].append(match_info)
-
-        # Save the results to a file
-        with open(result_json, 'w') as f:
-            json.dump(game_record, f, indent=4)
+        update_history(game, player, computer, result)
             
-        partida +=1
+        game +=1
 
         if not play_another_round():
             break
