@@ -203,14 +203,16 @@ def main():
 
     while True:
         try:
-            user_action = get_user_action()
+            player = get_user_action()
         except ValueError:
             range_str = f"[0, {len(GameAction) - 1}]"
             print(f"Invalid selection. Pick a choice in range {range_str}!")
             continue
+        
+        computer = get_computer_action()
+        result = assess_game(player, computer)
 
-        computer_action = get_computer_action()
-        assess_game(user_action, computer_action)
+        update_history(player.name, computer.name, result.name)
 
         if not play_another_round():
             break
