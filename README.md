@@ -36,23 +36,29 @@ Contorno de tarefas | Observable| Agentes | Determinista | Episódico | Estátic
 
 Una vez se conoce en profundidad el entorno de trabajo del agente, es posible definir con mayor precisión la estructura que este tomará. En este caso se ha optado por utilizar un programa de agente inteligente basado en modelos.
 
+![img](doc/model-based-reflex-agent.png)
+
 Este tipo de agentes consideran el historial de partidas y, por lo tanto, pueden actuar en un escenario que no se observa por completo, como es en este caso con el RPS, teniendo así una visión más completa del mismo.
 
 ![img](doc/agenteInteligente.png)
 
 ## 4. Implementación
 
-Para la implementación del agente, se utiliza una estadística para las tres primeras rondas  sobre los movimientos más utilizados por los americanos (véanse las imágenes adjuntas). De este modo se intenta predecir cuál será el primer movimiento del rival y jugar en base a ese resultado.
+Para la implementación del agente, se registra el resultado de cada partida en un archivo JSON con el siguiente formato:
 
-![img](doc/rps1.png)
+        {
+            "player": "Paper",
+            "computer": "Paper",
+            "result": "Tie"
+        }
 
-A partir de la 3ª partida seguiría las siguientes reglas obviando el sexo del usuario:
+Cuando el historial.json está vacío, o el número de partidas es menor a 3, la elección de "computer" se elige de manera aleatoria, ya que no se cuenta con un conjunto de datos suficiente para hacer una elección informada.
 
-![img](doc/rps2.png)
+Posteriormente, utilizando la información almacenada en el historial, se realiza un análisis de la frecuencia de cada elección por parte del "player". Se selecciona la opción con la frecuencia más alta y se elige la opción que la venza. Por ejemplo, si la elección con mayor frecuencia (en ese momento) es "tijera", la próxima elección de "computer" será "piedra".
+
+Mediante este método, se extrae información del conjunto de datos de partidas con el objetivo de determinar la elección con mayor probabilidad de victoria para "computer".
 
 Este agente está implementado en Python 3.10.12 y utiliza la librería Pandas. El código fue aportado por el usuario [@dfleta](https://github.com/dfleta) y modificado para acatar las necesidades de este proyecto por [@cuernomax2](https://github.com/cuernomax2) y por mí. El código se encuentra en [mi repositorio de Git](https://github.com/jesus-fv/piedra-papel-tijeras)
-
-![img](doc/model-based-reflex-agent.png)
 
 
 ## 5. Bibliografía

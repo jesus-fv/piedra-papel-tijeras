@@ -126,7 +126,7 @@ def get_computer_action():
     Objeto
     '''
     
-    #En el caso de que el json esté vacío o tenga menos de tres partidas jugadas, la elección es aleatoria
+    #Devolver elección aleatoria, en el caso de que el json tenga menos de 3 partidas guardadas
     if len(get_player_history()) <= 2:
         
         computer_selection = random.randint(0, len(GameAction) - 1)
