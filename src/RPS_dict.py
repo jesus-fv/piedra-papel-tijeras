@@ -60,10 +60,94 @@ def assess_game(user_action, computer_action):
     return game_result
 
 
+def get_player_history():
+    
+    '''
+    Devuelve el historial de partidas del player con su elección
+    
+    Returns
+    -------
+    list[str]
+    '''
+    
+    player_history = []
+    
+    json_file_path = 'history.json'
+
+    try:
+        with open(json_file_path, 'r') as file: 
+            data = json.load(file)
+            
+            game_history = data['history']
+    
+        for game in game_history:
+            player_history.append(game['player'])
+            
+    except FileNotFoundError:
+        pass
+    
+        
+    return player_history
+    
+
+def calculate_frequencies():
+    
+    '''
+    Calcula la frecuencia con la que aparecen en el historial de partidas cada elección
+    
+    Returns
+    -------
+    dict{str:int}
+    '''
+    
+    #Diccionario con la frecuencia con la que aparece cada elección (en un princio 0)
+    frequencies = {GameAction.Rock.name: 0, GameAction.Paper.name: 0, GameAction.Scissors.name: 0}
+    
+    player_history = get_player_history()
+        
+    total_elections = len(player_history)
+        
+    for player_action in frequencies:
+        #Contar las veces en las que aparecen cada elección en el historial de resultados del player
+        elections_count = player_history.count(player_action)
+        #Calcular la frecuencia de cada elección
+        frequencies[player_action] = elections_count / total_elections
+    
+    return frequencies
+
+
 def get_computer_action():
-    computer_selection = random.randint(0, len(GameAction) - 1)
-    computer_action = GameAction(computer_selection)
-    print(f"Computer picked {computer_action.name}.")
+    
+    '''
+    Devuelve la elección de computer
+        
+    Returns
+    -------
+    Objeto
+    '''
+    
+    #Devolver elección aleatoria, en el caso de que el json tenga menos de 3 partidas guardadas
+    if len(get_player_history()) <= 2:
+        
+        computer_selection = random.randint(0, len(GameAction) - 1)
+        computer_action = GameAction(computer_selection)
+        
+    else:
+
+        frequencies = calculate_frequencies()
+        
+        #Recuperar la elección que aparece con mayor frecuencia en el historial de partidas
+        player_action_frequency = max(frequencies, key=frequencies.get)
+        
+        #Obtener la opción que gana a la elección con más frecuencia
+        computer_action = Victories.get(GameAction[player_action_frequency].value)
+        
+        #Introducir cierta aleatoriedad para evitar patrones demasiado predecibles
+        if random.random() < 0.1:
+            computer_selection = random.randint(0, len(GameAction) - 1)
+            computer_action = GameAction(computer_selection)
+    
+    print(f"Computer picked 1 {computer_action.name}.")
 
     return computer_action
 
@@ -84,35 +168,49 @@ def play_another_round():
         another_round = input("\nInvalid selection. Please insert yes (y) or no (n) or press CTRL+C to exit : ")
     return another_round.lower() == 'y'
 
+def update_history(player, computer, result):
+    
+    """
+    Actualiza el historial de partidas
+
+    Parameters
+    ----------
+    param1 : str
+        Elección del player
+    param2 : str
+        Elección de computer
+    param3 : str
+        Resultado de la partida
+    """
+    
+    result_json = 'history.json'
+    
+    try:
+        with open(result_json, 'r') as f:
+            game_history = json.load(f)
+    except FileNotFoundError:
+        game_history = {"history": []}
+        
+    match_info = {"player": player, "computer": computer, "result": result}
+    
+    game_history["history"].append(match_info)
+
+    with open(result_json, 'w') as f:
+        json.dump(game_history, f, indent=4)
+
 
 def main():
 
     while True:
         try:
-            player1 = get_user_action()
+            user_action = get_user_action()
         except ValueError:
             range_str = f"[0, {len(GameAction) - 1}]"
             print(f"Invalid selection. Pick a choice in range {range_str}!")
             continue
 
-        result_json = 'result.json'
-        
-        try:
-            with open(result_json, 'r') as f:
-                game_record = json.load(f)
-        except FileNotFoundError:
-            game_record = {"record": []}
-
-        player2 = get_computer_action()
-        result = assess_game(player1, player2)
-
-        match_info = {"player1": player1, "player2": player2, "result": result}
-        
-        game_record["record"].append(match_info)
-
-        # Save the results to a file
-        with open(result_json, 'w') as f:
-            json.dump(game_record, f, indent=4)
+        computer_action = get_computer_action()
+        assess_game(user_action, computer_action)
 
         if not play_another_round():
             break

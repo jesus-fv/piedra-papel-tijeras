@@ -36,8 +36,6 @@ Contorno de tarefas | Observable| Agentes | Determinista | Episódico | Estátic
 
 Una vez se conoce en profundidad el entorno de trabajo del agente, es posible definir con mayor precisión la estructura que este tomará. En este caso se ha optado por utilizar un programa de agente inteligente basado en modelos.
 
-Este tipo de agentes consideran el historial de partidas y, por lo tanto, pueden actuar en un escenario que no se observa por completo, como es en este caso con el RPS, teniendo así una visión más completa del mismo.
-
 ![img](doc/agenteInteligente.png)
 
 El agente utiliza una estadística para las tres primeras rondas  sobre los movimientos más utilizados por los americanos (véanse las imágenes adjuntas). De este modo se intenta predecir cuál será el primer movimiento del rival y jugar en base a ese resultado, intentando siempre ganar.
@@ -45,22 +43,3 @@ El agente utiliza una estadística para las tres primeras rondas  sobre los movi
 ![img](doc/rps1.png)
 
 ![img](doc/rps2.png)
-
-## 4. Implementación
-
-Este agente está implementado en Python 3.10.12 y utiliza la librería Pandas. El código fue aportado por el usuario [@dfleta](https://github.com/dfleta) y modificado para acatar las necesidades de este proyecto por [@cuernomax2](https://github.com/cuernomax2) y por mí. El código se encuentra en [mi repositorio de Git](https://github.com/jesus-fv/piedra-papel-tijeras)
-
-![img](doc/model-based-reflex-agent.png)
-
-
-## 5. Bibliografía
-
-Lutz, Mark. Learning Python. Sebastopol, Ca, O’reilly, 2018.
-
-Martin, Robert C. Clean Code a Handbook of Agile Software Craftmanship. Upper Saddle River [Etc.] Prentice Hall, 2010.
-
-Martin, Robert C. Clean Architecture: A Craftsman’s Guide to Software Structure and Design. Prentice Hall, 2018.
-
-S. McConnel. Code Complete: A Practical Handbook of Software Construction, 2dn Edition. Microsoft Press, 2004.
-
-Russell, Peter. ARTIFICIAL INTELLIGENCE : A Modern Approach, Global Edition. S.L., Pearson Education Limited, 2021.
