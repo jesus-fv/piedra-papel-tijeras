@@ -78,7 +78,7 @@ def get_player_history():
             player_history.append(game['player'])
             
     except FileNotFoundError:
-        return []
+        pass
     
         
     return player_history
@@ -86,7 +86,7 @@ def get_player_history():
     
 def calculate_probabilities():
     
-    probabilities = {0: 0, 1: 0, 2: 0}
+    probabilities = {GameAction.Rock.name: 0, GameAction.Paper.name: 0, GameAction.Scissors.name: 0}
     
     player_history = get_player_history()
         
@@ -102,25 +102,24 @@ def calculate_probabilities():
 def get_computer_action(game):
     
     if len(get_player_history()) <= 2:
-
+        
         computer_selection = random.randint(0, len(GameAction) - 1)
         computer_action = GameAction(computer_selection)
-        print(f"Computer picked 1 {computer_action.name}.")
         
     else:
 
         probabilities = calculate_probabilities()
         player_action_frequency = max(probabilities, key=probabilities.get)
         
-        opciones = {0: 1, 1: 2, 2: 0}
-        computer_action = GameAction(opciones[player_action_frequency])
+        computer_action = Victories.get(GameAction[player_action_frequency].value)
         
         # Introducimos cierta aleatoriedad para evitar patrones demasiado predecibles
         if random.random() < 0.1:
             # 10% de probabilidad de elegir una acción aleatoria
-            computer_action = random.randint(0, len(GameAction) - 1)
-            
-        print(f"Computer picked 1 {computer_action.name}.")
+            computer_selection = random.randint(0, len(GameAction) - 1)
+            computer_action = GameAction(computer_selection)
+    
+    print(f"Computer picked 1 {computer_action.name}.")
 
     return computer_action
 
@@ -170,11 +169,11 @@ def main():
             range_str = f"[0, {len(GameAction) - 1}]"
             print(f"Invalid selection. Pick a choice in range {range_str}!")
             continue
-
+        
         computer = get_computer_action(game)
         result = assess_game(player, computer)
 
-        update_history(game, player, computer, result)
+        update_history(game, player.name, computer.name, result.name)
             
         game +=1
 
