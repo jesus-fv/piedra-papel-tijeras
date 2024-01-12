@@ -36,7 +36,7 @@ Contorno de tarefas | Observable| Agentes | Determinista | Episódico | Estátic
 
 Una vez se conoce en profundidad el entorno de trabajo del agente, es posible definir con mayor precisión la estructura que este tomará. Para el juego RPS, el programa del agente más adecuado sería el agente reactivo basado en modelos. La razón principal por la que se ha elegido este agente, es que en el juego de piedra, papel o tijeras es parcialmete observable, lo cual requiere un historial de partidas. De esta manera, se busca obtener la elección más acertada, teniendo como referencia la información acumulada de las partidas anteriores.
 
-![img](doc/agente.png)
+![img](doc/agenteinteligente.png)
 
 Cuando el historial.json está vacío, o el número de partidas es menor a 3, la elección del bot se elige de manera aleatoria, ya que no se cuenta con un dataset para analizar.
 
