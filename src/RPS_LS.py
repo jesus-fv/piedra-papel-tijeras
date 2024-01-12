@@ -3,12 +3,14 @@ import json
 from enum import IntEnum
 import os
 
-
+#Añadir las opciones de Lagarto y Spock
 class GameAction(IntEnum):
 
     Rock = 0
     Paper = 1
     Scissors = 2
+    Lizard = 3
+    Spock = 4
 
 
 class GameResult(IntEnum):
@@ -16,11 +18,13 @@ class GameResult(IntEnum):
     Defeat = 1
     Tie = 2
 
-
+#Añadir al diccionario las nuevas opciones de victoria
 Victories = {
-    GameAction.Rock: GameAction.Paper,
-    GameAction.Paper: GameAction.Scissors,
-    GameAction.Scissors: GameAction.Rock
+    GameAction.Rock: [GameAction.Paper, GameAction.Spock],
+    GameAction.Paper: [GameAction.Scissors, GameAction.Lizard],
+    GameAction.Scissors: [GameAction.Rock, GameAction.Spock],
+    GameAction.Lizard: [GameAction.Scissors, GameAction.Rock],
+    GameAction.Spock: [GameAction.Lizard, GameAction.Paper]
 }
 
 def assess_game(user_action, computer_action):
@@ -33,30 +37,49 @@ def assess_game(user_action, computer_action):
 
     # You picked Rock
     elif user_action == GameAction.Rock:
-        if computer_action == GameAction.Scissors:
-            print("Rock smashes scissors. You won!")
+        if computer_action == GameAction.Scissors or computer_action == GameAction.Lizard:
+            print("You won!")
             game_result = GameResult.Victory
         else:
-            print("Paper covers rock. You lost!")
+            print("You lost!")
             game_result = GameResult.Defeat
 
     # You picked Paper
     elif user_action == GameAction.Paper:
-        if computer_action == GameAction.Rock:
-            print("Paper covers rock. You won!")
+        if computer_action == GameAction.Rock or computer_action == GameAction.Spock:
+            print("You won!")
             game_result = GameResult.Victory
         else:
-            print("Scissors cuts paper. You lost!")
+            print("You lost!")
             game_result = GameResult.Defeat
-
+            
     # You picked Scissors
     elif user_action == GameAction.Scissors:
-        if computer_action == GameAction.Rock:
-            print("Rock smashes scissors. You lost!")
-            game_result = GameResult.Defeat
-        else:
-            print("Scissors cuts paper. You won!")
+        if computer_action == GameAction.Paper or computer_action == GameAction.Lizard:
+            print("You won!")
             game_result = GameResult.Victory
+        else:
+            print("You lost!")
+            game_result = GameResult.Defeat
+            
+    # You picked Lizard
+    elif user_action == GameAction.Lizard:
+        if computer_action == GameAction.Spock or computer_action == GameAction.Paper:
+            print("You won!")
+            game_result = GameResult.Victory
+        else:
+            print("You lost!")
+            game_result = GameResult.Defeat
+    
+    # You picked Spock
+    elif user_action == GameAction.Spock:
+        if computer_action == GameAction.Scissors or computer_action == GameAction.Rock:
+            print("You won!")
+            game_result = GameResult.Victory
+        else:
+            print("You lost!")
+            game_result = GameResult.Defeat
+            
 
     return game_result
 
@@ -73,7 +96,7 @@ def get_player_history():
     
     player_history = []
     
-    json_file_path = os.path.abspath('data/history.json')
+    json_file_path = os.path.abspath('data/historyRPSLS.json')
 
     try:
         with open(json_file_path, 'r') as file: 
@@ -102,7 +125,7 @@ def calculate_frequencies():
     '''
     
     #Diccionario con la frecuencia con la que aparece cada elección (en un princio 0)
-    frequencies = {GameAction.Rock.name: 0, GameAction.Paper.name: 0, GameAction.Scissors.name: 0}
+    frequencies = {GameAction.Rock.name: 0, GameAction.Paper.name: 0, GameAction.Scissors.name: 0, GameAction.Lizard.name: 0, GameAction.Spock.name: 0}
     
     player_history = get_player_history()
         
@@ -141,7 +164,8 @@ def get_computer_action():
         player_action_frequency = max(frequencies, key=frequencies.get)
         
         #Obtener la opción que gana a la elección con más frecuencia
-        computer_action = Victories.get(GameAction[player_action_frequency].value)
+        
+        computer_action = Victories.get(GameAction[player_action_frequency].value)[random.randint(0, 1)]
         
         #Introducir cierta aleatoriedad para evitar patrones demasiado predecibles
         if random.random() < 0.1:
@@ -184,7 +208,7 @@ def update_history(player, computer, result):
         Resultado de la partida
     """
     
-    result_json = os.path.abspath('data/history.json')
+    result_json = os.path.abspath('data/historyRPSLS.json')
     
     try:
         with open(result_json, 'r') as f:

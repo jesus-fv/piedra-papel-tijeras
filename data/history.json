@@ -1,0 +1,109 @@
+{
+    "history": [
+        {
+            "player": "Paper",
+            "computer": "Paper",
+            "result": "Tie"
+        },
+        {
+            "player": "Paper",
+            "computer": "Rock",
+            "result": "Victory"
+        },
+        {
+            "player": "Scissors",
+            "computer": "Scissors",
+            "result": "Tie"
+        },
+        {
+            "player": "Paper",
+            "computer": "Scissors",
+            "result": "Defeat"
+        },
+        {
+            "player": "Scissors",
+            "computer": "Scissors",
+            "result": "Tie"
+        },
+        {
+            "player": "Rock",
+            "computer": "Scissors",
+            "result": "Victory"
+        },
+        {
+            "player": "Rock",
+            "computer": "Scissors",
+            "result": "Victory"
+        },
+        {
+            "player": "Paper",
+            "computer": "Scissors",
+            "result": "Defeat"
+        },
+        {
+            "player": "Rock",
+            "computer": "Scissors",
+            "result": "Victory"
+        },
+        {
+            "player": "Rock",
+            "computer": "Scissors",
+            "result": "Victory"
+        },
+        {
+            "player": "Rock",
+            "computer": "Paper",
+            "result": "Defeat"
+        },
+        {
+            "player": "Rock",
+            "computer": "Paper",
+            "result": "Defeat"
+        },
+        {
+            "player": "Scissors",
+            "computer": "Paper",
+            "result": "Victory"
+        },
+        {
+            "player": "Scissors",
+            "computer": "Paper",
+            "result": "Victory"
+        },
+        {
+            "player": "Paper",
+            "computer": "Paper",
+            "result": "Tie"
+        },
+        {
+            "player": "Rock",
+            "computer": "Paper",
+            "result": "Defeat"
+        },
+        {
+            "player": "Scissors",
+            "computer": "Paper",
+            "result": "Victory"
+        },
+        {
+            "player": "Rock",
+            "computer": "Paper",
+            "result": "Defeat"
+        },
+        {
+            "player": "Paper",
+            "computer": "Paper",
+            "result": "Tie"
+        },
+        {
+            "player": "Paper",
+            "computer": "Paper",
+            "result": "Tie"
+        },
+        {
+            "player": "Rock",
+            "computer": "Paper",
+            "result": "Defeat"
+        }
+    ]
+}
