@@ -50,6 +50,14 @@ Se registra el resultado de cada partida en un archivo JSON con el siguiente for
 
 Utilizando la información almacenada en el historial, se realiza un análisis de la frecuencia de cada elección por parte del "player", se obtiene la de mayor frecuencia y se elige la opción que la venza. Por ejemplo, si la elección con mayor frecuencia (en ese momento) es "tijera", la próxima elección de "computer" será "piedra".
 
+## 4. Extensión
+
+En este paso se plantea extender la lógica para poder jugar al piedra, papel, tijera, lagarto, Spock.
+
+Para poder implementar este modo de juego, se deben añadir las opciones de lagarto y spock a la clase GameAction, al diccionario de victorias y a la función assess_game, para tener en cuenta las nuevas posibilidades de victoria y derrota.
+
+Por último se debe añadir al diccionario de frecuencias, para poder comparar las veces que se repiten en el historial.
+
 
 ## 5. Bibliografía
 
@@ -62,3 +70,5 @@ Martin, Robert C. Clean Architecture: A Craftsman’s Guide to Software Structur
 S. McConnel. Code Complete: A Practical Handbook of Software Construction, 2dn Edition. Microsoft Press, 2004.
 
 Russell, Peter. ARTIFICIAL INTELLIGENCE : A Modern Approach, Global Edition. S.L., Pearson Education Limited, 2021.
+
+[RPSLS](http://www.samkass.com/theories/RPSSL.html)

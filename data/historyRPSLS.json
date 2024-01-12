@@ -1,0 +1,59 @@
+{
+    "history": [
+        {
+            "player": "Spock",
+            "computer": "Rock",
+            "result": "Victory"
+        },
+        {
+            "player": "Paper",
+            "computer": "Rock",
+            "result": "Victory"
+        },
+        {
+            "player": "Lizard",
+            "computer": "Paper",
+            "result": "Victory"
+        },
+        {
+            "player": "Paper",
+            "computer": "Scissors",
+            "result": "Defeat"
+        },
+        {
+            "player": "Spock",
+            "computer": "Lizard",
+            "result": "Defeat"
+        },
+        {
+            "player": "Scissors",
+            "computer": "Lizard",
+            "result": "Victory"
+        },
+        {
+            "player": "Paper",
+            "computer": "Scissors",
+            "result": "Defeat"
+        },
+        {
+            "player": "Spock",
+            "computer": "Scissors",
+            "result": "Victory"
+        },
+        {
+            "player": "Rock",
+            "computer": "Scissors",
+            "result": "Victory"
+        },
+        {
+            "player": "Paper",
+            "computer": "Lizard",
+            "result": "Defeat"
+        },
+        {
+            "player": "Rock",
+            "computer": "Lizard",
+            "result": "Victory"
+        }
+    ]
+}
