@@ -34,17 +34,13 @@ Contorno de tarefas | Observable| Agentes | Determinista | Episódico | Estátic
 
 ## 3. Estructura del agente
 
-Una vez se conoce en profundidad el entorno de trabajo del agente, es posible definir con mayor precisión la estructura que este tomará. En este caso se ha optado por utilizar un programa de agente inteligente basado en modelos.
+Una vez se conoce en profundidad el entorno de trabajo del agente, es posible definir con mayor precisión la estructura que este tomará. Para el juego RPS, el programa del agente más adecuado sería el agente reactivo basado en modelos. La razón principal por la que se ha elegido este agente, es que en el juego de piedra, papel o tijeras es parcialmete observable, lo cual requiere un historial de partidas. De esta manera, se busca obtener la elección más acertada, teniendo como referencia la información acumulada de las partidas anteriores.
 
-![img](doc/model-based-reflex-agent.png)
+![img](doc/agente.png)
 
-Este tipo de agentes consideran el historial de partidas y, por lo tanto, pueden actuar en un escenario que no se observa por completo, como es en este caso con el RPS, teniendo así una visión más completa del mismo.
+Cuando el historial.json está vacío, o el número de partidas es menor a 3, la elección del bot se elige de manera aleatoria, ya que no se cuenta con un dataset para analizar.
 
-![img](doc/agenteInteligente.png)
-
-## 4. Implementación
-
-Para la implementación del agente, se registra el resultado de cada partida en un archivo JSON con el siguiente formato:
+Se registra el resultado de cada partida en un archivo JSON con el siguiente formato:
 
         {
             "player": "Paper",
@@ -52,13 +48,7 @@ Para la implementación del agente, se registra el resultado de cada partida en 
             "result": "Tie"
         }
 
-Cuando el historial.json está vacío, o el número de partidas es menor a 3, la elección de "computer" se elige de manera aleatoria, ya que no se cuenta con un conjunto de datos suficiente para hacer una elección informada.
-
-Posteriormente, utilizando la información almacenada en el historial, se realiza un análisis de la frecuencia de cada elección por parte del "player". Se selecciona la opción con la frecuencia más alta y se elige la opción que la venza. Por ejemplo, si la elección con mayor frecuencia (en ese momento) es "tijera", la próxima elección de "computer" será "piedra".
-
-Mediante este método, se extrae información del conjunto de datos de partidas con el objetivo de determinar la elección con mayor probabilidad de victoria para "computer".
-
-Este agente está implementado en Python 3.10.12 y utiliza la librería Pandas. El código fue aportado por el usuario [@dfleta](https://github.com/dfleta) y modificado para acatar las necesidades de este proyecto por [@cuernomax2](https://github.com/cuernomax2) y por mí. El código se encuentra en [mi repositorio de Git](https://github.com/jesus-fv/piedra-papel-tijeras)
+Utilizando la información almacenada en el historial, se realiza un análisis de la frecuencia de cada elección por parte del "player", se obtiene la de mayor frecuencia y se elige la opción que la venza. Por ejemplo, si la elección con mayor frecuencia (en ese momento) es "tijera", la próxima elección de "computer" será "piedra".
 
 
 ## 5. Bibliografía
