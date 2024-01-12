@@ -1,6 +1,7 @@
 import random
 import json
 from enum import IntEnum
+import os
 
 
 class GameAction(IntEnum):
@@ -72,7 +73,7 @@ def get_player_history():
     
     player_history = []
     
-    json_file_path = 'history.json'
+    json_file_path = os.path.abspath('data/history.json')
 
     try:
         with open(json_file_path, 'r') as file: 
@@ -183,7 +184,7 @@ def update_history(player, computer, result):
         Resultado de la partida
     """
     
-    result_json = 'history.json'
+    result_json = os.path.abspath('data/history.json')
     
     try:
         with open(result_json, 'r') as f:
