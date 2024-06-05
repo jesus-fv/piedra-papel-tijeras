@@ -20,7 +20,7 @@ Identificar correctamente las propiedades de este entorno es fundamental, ya que
 
 Resumen de las caracteríasticas del entorno del RPS:
 
-Contorno de tarefas | Observable| Agentes | Determinista | Episódico | Estático | Discreto | Conocido
+Entorno de tareas | Observable| Agentes | Determinista | Episódico | Estático | Discreto | Conocido
 :---: | :---: | :---: | :---: | :---: | :---: | :---: | :---: |
  RPS | Parcialmente | Multiagente | Estocástico | Episódico | Estático |  Discreto | Conocido |
 
